@@ -34,7 +34,7 @@ const resources = {
 };
 
 export const initI18next = async () => {
-  i18next
+  await i18next
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
@@ -47,4 +47,10 @@ export const initI18next = async () => {
         order: ["navigator"],
       },
     });
+
+  document.documentElement.lang = i18next.language;
+
+  i18next.on("languageChanged", (lng) => {
+    document.documentElement.lang = lng;
+  });
 };
