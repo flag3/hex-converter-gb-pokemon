@@ -1,6 +1,7 @@
 const jaCharHexSpecialMap: { [key: string]: string } = {
   ベ: "3D",
   ペ: "47",
+  "\n": "50",
   A: "60",
   B: "61",
   C: "62",
