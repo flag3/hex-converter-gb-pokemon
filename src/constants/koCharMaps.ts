@@ -2702,9 +2702,6 @@ export const koCharHexMap: { [key: string]: string } = {
     }),
     {},
   ),
-  ...Object.entries(koHexCharMap).reduce(
-    (acc, [hex, char]) => ({ ...acc, [char]: hex }),
-    {},
-  ),
+  ...Object.entries(koHexCharMap).reduce((acc, [hex, char]) => ({ ...acc, [char]: hex }), {}),
   ...koCharHexSpecialMap,
 };

@@ -188,10 +188,7 @@ export const enGen1HexCharMap: { [key: string]: string } = {
 };
 
 export const enGen1CharHexMap: { [key: string]: string } = {
-  ...Object.entries(enGen1HexCharMap).reduce(
-    (acc, [hex, char]) => ({ ...acc, [char]: hex }),
-    {},
-  ),
+  ...Object.entries(enGen1HexCharMap).reduce((acc, [hex, char]) => ({ ...acc, [char]: hex }), {}),
   ...enCharHexSpecialMap,
 };
 
@@ -410,9 +407,6 @@ export const enGen2HexCharMap: { [key: string]: string } = {
 };
 
 export const enGen2CharHexMap: { [key: string]: string } = {
-  ...Object.entries(enGen2HexCharMap).reduce(
-    (acc, [hex, char]) => ({ ...acc, [char]: hex }),
-    {},
-  ),
+  ...Object.entries(enGen2HexCharMap).reduce((acc, [hex, char]) => ({ ...acc, [char]: hex }), {}),
   ...enCharHexSpecialMap,
 };

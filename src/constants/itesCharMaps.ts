@@ -178,10 +178,7 @@ export const itesGen1HexCharMap: { [key: string]: string } = {
 };
 
 export const itesGen1CharHexMap: { [key: string]: string } = {
-  ...Object.entries(itesGen1HexCharMap).reduce(
-    (acc, [hex, char]) => ({ ...acc, [char]: hex }),
-    {},
-  ),
+  ...Object.entries(itesGen1HexCharMap).reduce((acc, [hex, char]) => ({ ...acc, [char]: hex }), {}),
   ...itesCharHexSpecialMap,
 };
 
@@ -347,9 +344,6 @@ export const itesGen2HexCharMap: { [key: string]: string } = {
 };
 
 export const itesGen2CharHexMap: { [key: string]: string } = {
-  ...Object.entries(itesGen2HexCharMap).reduce(
-    (acc, [hex, char]) => ({ ...acc, [char]: hex }),
-    {},
-  ),
+  ...Object.entries(itesGen2HexCharMap).reduce((acc, [hex, char]) => ({ ...acc, [char]: hex }), {}),
   ...itesCharHexSpecialMap,
 };

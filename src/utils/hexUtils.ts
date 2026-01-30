@@ -1,23 +1,10 @@
-import {
-  instructionMap,
-  instructionCBMap,
-} from "./../constants/instructionMaps";
+import { instructionMap, instructionCBMap } from "./../constants/instructionMaps";
 import { languageMaps, koHexChar2ByteMap } from "./../constants/languageMaps";
-import type {
-  CharacterMap,
-  Language,
-  Generation,
-  MapType,
-  InstructionInfo,
-} from "./../types";
+import type { CharacterMap, Language, Generation, MapType, InstructionInfo } from "./../types";
 import { getMemoizedInstructionMaps } from "./memoization";
 import { normalizeHex } from "./validationUtils";
 
-const getMap = (
-  language: Language,
-  gen: Generation,
-  type: MapType,
-): CharacterMap => {
+const getMap = (language: Language, gen: Generation, type: MapType): CharacterMap => {
   const defaultMap = languageMaps.en.gen1[type];
   const languageMap = languageMaps[language];
   if (!languageMap) return defaultMap;
@@ -33,11 +20,7 @@ const hexCharMap = (language: Language, gen: Generation): CharacterMap => {
   return getMap(language, gen, "hex");
 };
 
-export const textToHex = (
-  text: string,
-  language: Language,
-  gen: Generation,
-): string => {
+export const textToHex = (text: string, language: Language, gen: Generation): string => {
   const result = [];
   const map = charHexMap(language, gen);
 
@@ -57,11 +40,7 @@ export const textToHex = (
   return result.join(" ");
 };
 
-export const hexToText = (
-  hex: string,
-  language: Language,
-  gen: Generation,
-): string => {
+export const hexToText = (hex: string, language: Language, gen: Generation): string => {
   const hexArray = normalizeHex(hex);
   const map = hexCharMap(language, gen);
 
@@ -83,11 +62,7 @@ export const hexToText = (
   return hexArray.map((hex) => map[hex] || "").join("");
 };
 
-const processOperands = (
-  instruction: string,
-  operands: string[],
-  operandCount: number,
-): string => {
+const processOperands = (instruction: string, operands: string[], operandCount: number): string => {
   if (operandCount === 2) {
     return instruction.replace(
       "**",
@@ -111,8 +86,7 @@ export const hexToProgram = (hex: string): string => {
     let instruction: string;
 
     if (hexArray[i] === "CB") {
-      instruction =
-        instructionCBMap[hexArray[++i]] || instructionMap[hexArray[i - 1]];
+      instruction = instructionCBMap[hexArray[++i]] || instructionMap[hexArray[i - 1]];
     } else {
       instruction = instructionMap[hexArray[i]] || "";
     }
@@ -187,8 +161,7 @@ const parseInstruction = (
 
 export const programToHex = (program: string): string => {
   const lines = program.split("\n");
-  const { instructionInfoMap, cbInstructionInfoMap } =
-    getMemoizedInstructionMaps();
+  const { instructionInfoMap, cbInstructionInfoMap } = getMemoizedInstructionMaps();
 
   return lines
     .map((line) => {
@@ -200,16 +173,10 @@ export const programToHex = (program: string): string => {
       }
 
       const firstSpaceIndex = line.indexOf(" ");
-      const instructionPart =
-        firstSpaceIndex === -1 ? line : line.slice(0, firstSpaceIndex);
-      const operandPart =
-        firstSpaceIndex === -1 ? "" : line.slice(firstSpaceIndex + 1);
+      const instructionPart = firstSpaceIndex === -1 ? line : line.slice(0, firstSpaceIndex);
+      const operandPart = firstSpaceIndex === -1 ? "" : line.slice(firstSpaceIndex + 1);
 
-      const parsed = parseInstruction(
-        instructionPart,
-        operandPart,
-        instructionInfoMap,
-      );
+      const parsed = parseInstruction(instructionPart, operandPart, instructionInfoMap);
       if (!parsed) return "";
 
       const { opcode, operandsHex } = parsed;
