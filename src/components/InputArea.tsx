@@ -1,4 +1,5 @@
-import { ChangeEvent, memo } from "react";
+import { memo } from "react";
+import type { ChangeEvent } from "react";
 
 interface InputAreaProps {
   label: string;

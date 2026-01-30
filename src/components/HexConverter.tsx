@@ -4,7 +4,7 @@ import type { Generation, SelectorOption } from "./../types";
 import { InputArea } from "./InputArea";
 import { ResetButton } from "./ResetButton";
 import { Selector } from "./Selector";
-import { ChangeEvent } from "react";
+import type { ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 export const HexConverter = () => {
