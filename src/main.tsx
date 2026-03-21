@@ -4,7 +4,7 @@ import { initI18next } from "./i18n/config";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-initI18next().then(() => {
+void initI18next().then(() => {
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
       <App />
