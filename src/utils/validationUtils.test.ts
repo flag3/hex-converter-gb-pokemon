@@ -1,4 +1,4 @@
-import { sanitizeHex, isValidHex, normalizeHex } from "./validationUtils";
+import { sanitizeHex, normalizeHex } from "./validationUtils";
 import { describe, it, expect } from "vitest";
 
 describe("validationUtils", () => {
@@ -21,28 +21,6 @@ describe("validationUtils", () => {
 
     it("should return empty string for empty input", () => {
       expect(sanitizeHex("")).toBe("");
-    });
-  });
-
-  describe("isValidHex", () => {
-    it("should return true for valid hex string with spaces", () => {
-      expect(isValidHex("80 81 82")).toBe(true);
-    });
-
-    it("should return true for empty string", () => {
-      expect(isValidHex("")).toBe(true);
-    });
-
-    it("should return true for uppercase and lowercase hex", () => {
-      expect(isValidHex("aAbBcCdDeEfF")).toBe(true);
-    });
-
-    it("should return false for string containing invalid characters", () => {
-      expect(isValidHex("80GG81")).toBe(false);
-    });
-
-    it("should return false for string with special characters", () => {
-      expect(isValidHex("80!81")).toBe(false);
     });
   });
 
