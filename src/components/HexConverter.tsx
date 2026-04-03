@@ -1,4 +1,3 @@
-import "./../App.css";
 import { useHexConverter } from "./../hooks/useHexConverter";
 import type { Generation, SelectorOption } from "./../types";
 import { InputArea } from "./InputArea";
