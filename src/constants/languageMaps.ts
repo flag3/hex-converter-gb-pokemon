@@ -25,6 +25,11 @@ import {
 } from "./jaCharMaps";
 import { koHexCharMap, koCharHexMap } from "./koCharMaps";
 
+const enMaps = {
+  gen1: { hex: enGen1HexCharMap, char: enGen1CharHexMap },
+  gen2: { hex: enGen2HexCharMap, char: enGen2CharHexMap },
+};
+
 const frdeMaps = {
   gen1: { hex: frdeGen1HexCharMap, char: frdeGen1CharHexMap },
   gen2: { hex: frdeGen2HexCharMap, char: frdeGen2CharHexMap },
@@ -35,24 +40,23 @@ const itesMaps = {
   gen2: { hex: itesGen2HexCharMap, char: itesGen2CharHexMap },
 };
 
+const jaMaps = {
+  gen1: { hex: jaGen1HexCharMap, char: jaGen1CharHexMap },
+  gen2: { hex: jaGen2HexCharMap, char: jaGen2CharHexMap },
+};
+
 const koMaps = {
   gen1: { hex: koHexCharMap, char: koCharHexMap },
   gen2: { hex: koHexCharMap, char: koCharHexMap },
 };
 
 export const languageMaps: LanguageMap = {
-  en: {
-    gen1: { hex: enGen1HexCharMap, char: enGen1CharHexMap },
-    gen2: { hex: enGen2HexCharMap, char: enGen2CharHexMap },
-  },
+  en: enMaps,
   fr: frdeMaps,
   de: frdeMaps,
   it: itesMaps,
   es: itesMaps,
-  ja: {
-    gen1: { hex: jaGen1HexCharMap, char: jaGen1CharHexMap },
-    gen2: { hex: jaGen2HexCharMap, char: jaGen2CharHexMap },
-  },
+  ja: jaMaps,
   ko: koMaps,
 };
 
