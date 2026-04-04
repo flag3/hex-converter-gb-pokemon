@@ -32,4 +32,10 @@ export interface SelectorOption {
   label: string;
 }
 
+export interface ButtonProps {
+  icon: string;
+  onClick: () => void;
+  disabled?: boolean;
+}
+
 export type MapType = "hex" | "char";
