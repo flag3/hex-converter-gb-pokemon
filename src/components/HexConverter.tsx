@@ -1,10 +1,10 @@
 import { useHexConverter } from "./../hooks/useHexConverter";
 import type { Generation, SelectorOption } from "./../types";
-import { InputArea } from "./InputArea";
-import { ResetButton } from "./ResetButton";
-import { Selector } from "./Selector";
 import type { ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { Button } from "./ui/Button";
+import { Select } from "./ui/Select";
+import { Textarea } from "./ui/Textarea";
 
 export const HexConverter = () => {
   const { t, i18n } = useTranslation();
@@ -35,26 +35,39 @@ export const HexConverter = () => {
   return (
     <div>
       <h2>{t("title")}</h2>
-      <Selector
-        label={t("language")}
-        value={i18n.language}
-        options={languageOptions}
-        onChange={(event) => i18n.changeLanguage(event.target.value)}
-      />
-      {i18n.language !== "ko" && (
-        <Selector
-          label={t("gen")}
-          value={gen}
-          options={generationOptions}
-          onChange={(event) => setGen(event.target.value as Generation)}
+      <div>
+        {t("language")}
+        <Select
+          value={i18n.language}
+          options={languageOptions}
+          onChange={(event) => i18n.changeLanguage(event.target.value)}
         />
+      </div>
+      {i18n.language !== "ko" && (
+        <div>
+          {t("gen")}
+          <Select
+            value={gen}
+            options={generationOptions}
+            onChange={(event) => setGen(event.target.value as Generation)}
+          />
+        </div>
       )}
       <div className="input-container">
-        <InputArea label={t("text")} value={text} onChange={handleTextChange} />
-        <InputArea label={t("hex")} value={hex} onChange={handleHexChange} />
-        <InputArea label={t("program")} value={program} onChange={handleProgramChange} />
+        <div>
+          <label>{t("text")}</label>
+          <Textarea value={text} onChange={handleTextChange} />
+        </div>
+        <div>
+          <label>{t("hex")}</label>
+          <Textarea value={hex} onChange={handleHexChange} />
+        </div>
+        <div>
+          <label>{t("program")}</label>
+          <Textarea value={program} onChange={handleProgramChange} />
+        </div>
       </div>
-      <ResetButton onClick={reset} />
+      <Button onClick={reset} icon="material-symbols:delete-outline" />
     </div>
   );
 };

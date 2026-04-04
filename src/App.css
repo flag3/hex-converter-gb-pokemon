@@ -35,6 +35,11 @@ button:hover {
   background-color: #555;
 }
 
+button svg {
+  width: 24px;
+  height: 24px;
+}
+
 @media screen and (max-width: 768px) {
   .input-container {
     display: block;
