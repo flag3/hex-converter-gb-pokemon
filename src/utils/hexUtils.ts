@@ -4,6 +4,12 @@ import type { CharacterMap, Language, Generation, MapType, InstructionInfo } fro
 import { getMemoizedInstructionMaps } from "./memoization";
 import { normalizeHex } from "./validationUtils";
 
+const JAPANESE_VOICED_MARK = "\u3099";
+const JAPANESE_SEMI_VOICED_MARK = "\u309A";
+
+const KOREAN_TWOBYTE_HEX_MIN = "00";
+const KOREAN_TWOBYTE_HEX_MAX = "0A";
+
 const getMap = (language: Language, gen: Generation, type: MapType): CharacterMap => {
   const defaultMap = languageMaps.en.gen1[type];
   const languageMap = languageMaps[language];
@@ -28,7 +34,7 @@ export const textToHex = (text: string, language: Language, gen: Generation): st
     const char = text[i];
     const nextChar = text[i + 1];
 
-    if (["\u3099", "\u309A"].includes(nextChar)) {
+    if ([JAPANESE_VOICED_MARK, JAPANESE_SEMI_VOICED_MARK].includes(nextChar)) {
       const combinedChar = char + nextChar;
       result.push(map[combinedChar] || "");
       i++;
@@ -48,7 +54,11 @@ export const hexToText = (hex: string, language: Language, gen: Generation): str
     const result = [];
     for (let i = 0; i < hexArray.length; i++) {
       const hex = hexArray[i];
-      if (hex >= "00" && hex <= "0A" && i + 1 < hexArray.length) {
+      if (
+        hex >= KOREAN_TWOBYTE_HEX_MIN &&
+        hex <= KOREAN_TWOBYTE_HEX_MAX &&
+        i + 1 < hexArray.length
+      ) {
         const nextHex = hexArray[i + 1];
         result.push(koHexChar2ByteMap[hex]?.[nextHex]);
         i++;

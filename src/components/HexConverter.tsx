@@ -1,5 +1,6 @@
 import { useHexConverter } from "./../hooks/useHexConverter";
-import type { Generation, SelectorOption } from "./../types";
+import type { Generation } from "./../types";
+import { LANGUAGE_OPTIONS, GENERATION_OPTIONS } from "./../constants/options";
 import type { ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "./ui/Button";
@@ -39,7 +40,7 @@ export const HexConverter = () => {
         {t("language")}
         <Select
           value={i18n.language}
-          options={languageOptions}
+          options={LANGUAGE_OPTIONS}
           onChange={(event) => i18n.changeLanguage(event.target.value)}
         />
       </div>
@@ -48,7 +49,7 @@ export const HexConverter = () => {
           {t("gen")}
           <Select
             value={gen}
-            options={generationOptions}
+            options={GENERATION_OPTIONS}
             onChange={(event) => setGen(event.target.value as Generation)}
           />
         </div>
@@ -71,18 +72,3 @@ export const HexConverter = () => {
     </div>
   );
 };
-
-const languageOptions: SelectorOption[] = [
-  { value: "en", label: "English" },
-  { value: "fr", label: "Français" },
-  { value: "de", label: "Deutsch" },
-  { value: "it", label: "Italiano" },
-  { value: "es", label: "Español" },
-  { value: "ja", label: "日本語" },
-  { value: "ko", label: "한국어" },
-];
-
-const generationOptions: SelectorOption[] = [
-  { value: "1", label: "1" },
-  { value: "2", label: "2" },
-];
