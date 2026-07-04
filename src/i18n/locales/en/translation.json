@@ -1,6 +1,7 @@
 {
   "title": "Hex Converter for Game Boy Pokémon",
   "gen": "Generation",
+  "cpu": "CPU",
   "language": "Language",
   "text": "Text",
   "hex": "Hex",

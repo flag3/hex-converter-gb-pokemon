@@ -13,4 +13,10 @@ export const LANGUAGE_OPTIONS: SelectorOption[] = [
 export const GENERATION_OPTIONS: SelectorOption[] = [
   { value: "1", label: "1" },
   { value: "2", label: "2" },
+  { value: "3", label: "3" },
+];
+
+export const CPU_MODE_OPTIONS: SelectorOption[] = [
+  { value: "thumb", label: "Thumb" },
+  { value: "arm", label: "ARM" },
 ];

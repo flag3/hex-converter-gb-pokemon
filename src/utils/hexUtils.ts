@@ -1,7 +1,17 @@
+import { gen3CharHexMap, gen3HexCharMap } from "./../constants/gen3CharMaps";
 import { instructionMap, instructionCBMap } from "./../constants/instructionMaps";
 import { languageMaps, koHexChar2ByteMap } from "./../constants/languageMaps";
-import type { CharacterMap, Language, Generation, MapType, InstructionInfo } from "./../types";
+import type {
+  CharacterMap,
+  CpuMode,
+  Language,
+  Generation,
+  MapType,
+  InstructionInfo,
+} from "./../types";
+import { assembleArm, disassembleArm } from "./armUtils";
 import { getMemoizedInstructionMaps } from "./memoization";
+import { assembleThumb, disassembleThumb } from "./thumbUtils";
 import { normalizeHex } from "./validationUtils";
 
 const JAPANESE_VOICED_MARK = "\u3099";
@@ -11,6 +21,9 @@ const KOREAN_TWOBYTE_HEX_MIN = "00";
 const KOREAN_TWOBYTE_HEX_MAX = "0A";
 
 const getMap = (language: Language, gen: Generation, type: MapType): CharacterMap => {
+  // Generation III uses a single (Japanese-based) character set for every UI language
+  if (gen === "3") return type === "hex" ? gen3HexCharMap : gen3CharHexMap;
+
   const defaultMap = languageMaps.en.gen1[type];
   const languageMap = languageMaps[language];
   if (!languageMap) return defaultMap;
@@ -50,7 +63,7 @@ export const hexToText = (hex: string, language: Language, gen: Generation): str
   const hexArray = normalizeHex(hex);
   const map = hexCharMap(language, gen);
 
-  if (language === "ko") {
+  if (language === "ko" && gen !== "3") {
     const result = [];
     for (let i = 0; i < hexArray.length; i++) {
       const hex = hexArray[i];
@@ -88,7 +101,9 @@ const processOperands = (instruction: string, operands: string[], operandCount: 
   return instruction;
 };
 
-export const hexToProgram = (hex: string): string => {
+export const hexToProgram = (hex: string, gen: Generation, cpuMode: CpuMode = "thumb"): string => {
+  if (gen === "3") return cpuMode === "arm" ? disassembleArm(hex) : disassembleThumb(hex);
+
   const hexArray = normalizeHex(hex);
   const result = [];
 
@@ -169,7 +184,13 @@ const parseInstruction = (
   return null;
 };
 
-export const programToHex = (program: string): string => {
+export const programToHex = (
+  program: string,
+  gen: Generation,
+  cpuMode: CpuMode = "thumb",
+): string => {
+  if (gen === "3") return cpuMode === "arm" ? assembleArm(program) : assembleThumb(program);
+
   const lines = program.split("\n");
   const { instructionInfoMap, cbInstructionInfoMap } = getMemoizedInstructionMaps();
 

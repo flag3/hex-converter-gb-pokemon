@@ -1,6 +1,6 @@
 import { useHexConverter } from "./../hooks/useHexConverter";
-import type { Generation } from "./../types";
-import { LANGUAGE_OPTIONS, GENERATION_OPTIONS } from "./../constants/options";
+import type { CpuMode, Generation } from "./../types";
+import { LANGUAGE_OPTIONS, GENERATION_OPTIONS, CPU_MODE_OPTIONS } from "./../constants/options";
 import type { ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "./ui/Button";
@@ -12,6 +12,8 @@ export const HexConverter = () => {
   const {
     gen,
     setGen,
+    cpuMode,
+    setCpuMode,
     text,
     hex,
     program,
@@ -51,6 +53,16 @@ export const HexConverter = () => {
             value={gen}
             options={GENERATION_OPTIONS}
             onChange={(event) => setGen(event.target.value as Generation)}
+          />
+        </div>
+      )}
+      {gen === "3" && (
+        <div>
+          {t("cpu")}
+          <Select
+            value={cpuMode}
+            options={CPU_MODE_OPTIONS}
+            onChange={(event) => setCpuMode(event.target.value as CpuMode)}
           />
         </div>
       )}
