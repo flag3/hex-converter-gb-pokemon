@@ -18,32 +18,22 @@ export interface GenerationMaps {
   char: CharacterMap;
 }
 
-export interface LanguageMap {
-  [language: string]: {
+export type LanguageMap = Record<
+  Language,
+  {
     gen1: GenerationMaps;
     gen2: GenerationMaps;
-  };
-}
+  }
+>;
 
 export interface InstructionInfo {
   opcode: string;
   operandPattern: string;
 }
 
-export interface InstructionMaps {
-  instructionInfoMap: { [instruction: string]: InstructionInfo[] };
-  cbInstructionInfoMap: { [instruction: string]: InstructionInfo[] };
-}
-
 export interface SelectorOption {
   value: string;
   label: string;
-}
-
-export interface ButtonProps {
-  icon: string;
-  onClick: () => void;
-  disabled?: boolean;
 }
 
 export type MapType = "hex" | "char";

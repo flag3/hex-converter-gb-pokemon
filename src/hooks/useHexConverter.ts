@@ -2,7 +2,7 @@ import type { CpuMode, Language, Generation } from "./../types";
 import { isLanguage } from "./../types";
 import { textToHex, hexToText, hexToProgram, programToHex } from "./../utils/hexUtils";
 import { sanitizeHex } from "./../utils/validationUtils";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const useHexConverter = () => {
@@ -14,45 +14,32 @@ export const useHexConverter = () => {
   const [hex, setHex] = useState("");
   const [program, setProgram] = useState("");
 
-  const updateFromText = useCallback(
-    (newText: string) => {
-      const newHex = textToHex(newText, language, gen);
-      const newProgram = hexToProgram(newHex, gen, cpuMode);
-      setText(newText);
-      setHex(newHex);
-      setProgram(newProgram);
-    },
-    [language, gen, cpuMode],
-  );
+  const updateFromText = (newText: string) => {
+    const newHex = textToHex(newText, language, gen);
+    setText(newText);
+    setHex(newHex);
+    setProgram(hexToProgram(newHex, gen, cpuMode));
+  };
 
-  const updateFromHex = useCallback(
-    (newHex: string) => {
-      const cleanedHex = sanitizeHex(newHex);
-      const newText = hexToText(cleanedHex, language, gen);
-      const newProgram = hexToProgram(cleanedHex, gen, cpuMode);
-      setHex(cleanedHex);
-      setText(newText);
-      setProgram(newProgram);
-    },
-    [language, gen, cpuMode],
-  );
+  const updateFromHex = (newHex: string) => {
+    const cleanedHex = sanitizeHex(newHex);
+    setHex(cleanedHex);
+    setText(hexToText(cleanedHex, language, gen));
+    setProgram(hexToProgram(cleanedHex, gen, cpuMode));
+  };
 
-  const updateFromProgram = useCallback(
-    (newProgram: string) => {
-      const newHex = programToHex(newProgram, gen, cpuMode);
-      const newText = hexToText(newHex, language, gen);
-      setProgram(newProgram);
-      setHex(newHex);
-      setText(newText);
-    },
-    [language, gen, cpuMode],
-  );
+  const updateFromProgram = (newProgram: string) => {
+    const newHex = programToHex(newProgram, gen, cpuMode);
+    setProgram(newProgram);
+    setHex(newHex);
+    setText(hexToText(newHex, language, gen));
+  };
 
-  const reset = useCallback(() => {
+  const reset = () => {
     setText("");
     setHex("");
     setProgram("");
-  }, []);
+  };
 
   return {
     gen,

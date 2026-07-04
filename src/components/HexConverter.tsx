@@ -1,7 +1,6 @@
 import { useHexConverter } from "./../hooks/useHexConverter";
 import type { CpuMode, Generation } from "./../types";
 import { LANGUAGE_OPTIONS, GENERATION_OPTIONS, CPU_MODE_OPTIONS } from "./../constants/options";
-import type { ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "./ui/Button";
 import { Select } from "./ui/Select";
@@ -22,18 +21,6 @@ export const HexConverter = () => {
     updateFromProgram,
     reset,
   } = useHexConverter();
-
-  const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    updateFromText(event.target.value);
-  };
-
-  const handleHexChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    updateFromHex(event.target.value);
-  };
-
-  const handleProgramChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    updateFromProgram(event.target.value);
-  };
 
   return (
     <div>
@@ -69,15 +56,15 @@ export const HexConverter = () => {
       <div className="input-container">
         <div>
           <label>{t("text")}</label>
-          <Textarea value={text} onChange={handleTextChange} />
+          <Textarea value={text} onChange={(event) => updateFromText(event.target.value)} />
         </div>
         <div>
           <label>{t("hex")}</label>
-          <Textarea value={hex} onChange={handleHexChange} />
+          <Textarea value={hex} onChange={(event) => updateFromHex(event.target.value)} />
         </div>
         <div>
           <label>{t("program")}</label>
-          <Textarea value={program} onChange={handleProgramChange} />
+          <Textarea value={program} onChange={(event) => updateFromProgram(event.target.value)} />
         </div>
       </div>
       <Button onClick={reset} icon="material-symbols:delete-outline" />

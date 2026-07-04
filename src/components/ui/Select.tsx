@@ -1,4 +1,3 @@
-import { memo } from "react";
 import type { ChangeEvent } from "react";
 import type { SelectorOption } from "../../types";
 
@@ -8,7 +7,7 @@ type SelectProps = {
   options: SelectorOption[];
 };
 
-export const Select = memo(({ value, onChange, options }: SelectProps) => {
+export const Select = ({ value, onChange, options }: SelectProps) => {
   return (
     <select value={value} onChange={onChange}>
       {options.map((option) => (
@@ -18,4 +17,4 @@ export const Select = memo(({ value, onChange, options }: SelectProps) => {
       ))}
     </select>
   );
-});
+};

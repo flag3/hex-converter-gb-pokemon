@@ -10,7 +10,6 @@ import type {
   InstructionInfo,
 } from "./../types";
 import { assembleArm, disassembleArm } from "./armUtils";
-import { getMemoizedInstructionMaps } from "./memoization";
 import { assembleThumb, disassembleThumb } from "./thumbUtils";
 import { normalizeHex } from "./validationUtils";
 
@@ -24,24 +23,13 @@ const getMap = (language: Language, gen: Generation, type: MapType): CharacterMa
   // Generation III uses a single (Japanese-based) character set for every UI language
   if (gen === "3") return type === "hex" ? gen3HexCharMap : gen3CharHexMap;
 
-  const defaultMap = languageMaps.en.gen1[type];
   const languageMap = languageMaps[language];
-  if (!languageMap) return defaultMap;
-
   return gen === "2" ? languageMap.gen2[type] : languageMap.gen1[type];
-};
-
-const charHexMap = (language: Language, gen: Generation): CharacterMap => {
-  return getMap(language, gen, "char");
-};
-
-const hexCharMap = (language: Language, gen: Generation): CharacterMap => {
-  return getMap(language, gen, "hex");
 };
 
 export const textToHex = (text: string, language: Language, gen: Generation): string => {
   const result = [];
-  const map = charHexMap(language, gen);
+  const map = getMap(language, gen, "char");
 
   for (let i = 0; i < text.length; i++) {
     const char = text[i];
@@ -61,7 +49,7 @@ export const textToHex = (text: string, language: Language, gen: Generation): st
 
 export const hexToText = (hex: string, language: Language, gen: Generation): string => {
   const hexArray = normalizeHex(hex);
-  const map = hexCharMap(language, gen);
+  const map = getMap(language, gen, "hex");
 
   if (language === "ko" && gen !== "3") {
     const result = [];
@@ -128,6 +116,20 @@ export const hexToProgram = (hex: string, gen: Generation, cpuMode: CpuMode = "t
   return result.join("\n");
 };
 
+const instructionInfoMap: { [instruction: string]: InstructionInfo[] } = {};
+for (const [hex, template] of Object.entries(instructionMap)) {
+  const firstSpaceIndex = template.indexOf(" ");
+  const instruction = firstSpaceIndex === -1 ? template : template.slice(0, firstSpaceIndex);
+  const operandPattern = firstSpaceIndex === -1 ? "" : template.slice(firstSpaceIndex + 1).trim();
+  (instructionInfoMap[instruction] ??= []).push({ opcode: hex, operandPattern });
+}
+
+const cbInstructionInfoMap: { [instruction: string]: InstructionInfo[] } = {};
+for (const [hex, template] of Object.entries(instructionCBMap)) {
+  const normalizedTemplate = template.replace(/\s+/g, " ");
+  (cbInstructionInfoMap[normalizedTemplate] ??= []).push({ opcode: hex, operandPattern: "" });
+}
+
 const patternToRegex = (pattern: string): RegExp => {
   let regexStr = "";
   for (let i = 0; i < pattern.length; i++) {
@@ -192,7 +194,6 @@ export const programToHex = (
   if (gen === "3") return cpuMode === "arm" ? assembleArm(program) : assembleThumb(program);
 
   const lines = program.split("\n");
-  const { instructionInfoMap, cbInstructionInfoMap } = getMemoizedInstructionMaps();
 
   return lines
     .map((line) => {

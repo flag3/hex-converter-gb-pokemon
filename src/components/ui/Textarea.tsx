@@ -1,4 +1,3 @@
-import { memo } from "react";
 import type { ChangeEvent } from "react";
 
 interface TextareaProps {
@@ -6,6 +5,6 @@ interface TextareaProps {
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-export const Textarea = memo(({ value, onChange }: TextareaProps) => {
+export const Textarea = ({ value, onChange }: TextareaProps) => {
   return <textarea value={value} onChange={onChange} rows={20} cols={44} />;
-});
+};
