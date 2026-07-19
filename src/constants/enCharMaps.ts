@@ -1,3 +1,5 @@
+import { invertMap } from "./invertMap";
+
 const enCharHexSpecialMap: { [key: string]: string } = {
   A: "80",
   B: "81",
@@ -188,7 +190,7 @@ export const enGen1HexCharMap: { [key: string]: string } = {
 };
 
 export const enGen1CharHexMap: { [key: string]: string } = {
-  ...Object.entries(enGen1HexCharMap).reduce((acc, [hex, char]) => ({ ...acc, [char]: hex }), {}),
+  ...invertMap(enGen1HexCharMap),
   ...enCharHexSpecialMap,
 };
 
@@ -407,6 +409,6 @@ export const enGen2HexCharMap: { [key: string]: string } = {
 };
 
 export const enGen2CharHexMap: { [key: string]: string } = {
-  ...Object.entries(enGen2HexCharMap).reduce((acc, [hex, char]) => ({ ...acc, [char]: hex }), {}),
+  ...invertMap(enGen2HexCharMap),
   ...enCharHexSpecialMap,
 };

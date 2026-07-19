@@ -1,3 +1,5 @@
+import { invertMap } from "./invertMap";
+
 const koCharHexSpecialMap: { [key: string]: string } = {
   F: "85",
   G: "86",
@@ -291,7 +293,7 @@ const koHexChar2Byte00Map: { [key: string]: string } = {
   "F9": "9",
 };
 
-export const koHexChar2Byte01Map: { [key: string]: string } = {
+const koHexChar2Byte01Map: { [key: string]: string } = {
   "01": "가",
   "02": "각",
   "03": "간",
@@ -529,7 +531,7 @@ export const koHexChar2Byte01Map: { [key: string]: string } = {
   "FF": "꽤",
 };
 
-export const koHexChar2Byte02Map: { [key: string]: string } = {
+const koHexChar2Byte02Map: { [key: string]: string } = {
   "00": "꽥",
   "01": "꽹",
   "02": "꾀",
@@ -766,7 +768,7 @@ export const koHexChar2Byte02Map: { [key: string]: string } = {
   "FE": "덥",
 };
 
-export const koHexChar2Byte03Map: { [key: string]: string } = {
+const koHexChar2Byte03Map: { [key: string]: string } = {
   "01": "덧",
   "02": "덩",
   "03": "덫",
@@ -1004,7 +1006,7 @@ export const koHexChar2Byte03Map: { [key: string]: string } = {
   "FF": "록",
 };
 
-export const koHexChar2Byte04Map: { [key: string]: string } = {
+const koHexChar2Byte04Map: { [key: string]: string } = {
   "00": "론",
   "01": "롤",
   "02": "롬",
@@ -1242,7 +1244,7 @@ export const koHexChar2Byte04Map: { [key: string]: string } = {
   "FE": "벗",
 };
 
-export const koHexChar2Byte05Map: { [key: string]: string } = {
+const koHexChar2Byte05Map: { [key: string]: string } = {
   "01": "벙",
   "02": "벚",
   "03": "베",
@@ -1480,7 +1482,7 @@ export const koHexChar2Byte05Map: { [key: string]: string } = {
   "FF": "셴",
 };
 
-export const koHexChar2Byte06Map: { [key: string]: string } = {
+const koHexChar2Byte06Map: { [key: string]: string } = {
   "00": "셸",
   "01": "솅",
   "02": "소",
@@ -1721,7 +1723,7 @@ export const koHexChar2Byte06Map: { [key: string]: string } = {
   "FE": "엎",
 };
 
-export const koHexChar2Byte07Map: { [key: string]: string } = {
+const koHexChar2Byte07Map: { [key: string]: string } = {
   "01": "에",
   "02": "엑",
   "03": "엔",
@@ -1959,7 +1961,7 @@ export const koHexChar2Byte07Map: { [key: string]: string } = {
   "FF": "죕",
 };
 
-export const koHexChar2Byte08Map: { [key: string]: string } = {
+const koHexChar2Byte08Map: { [key: string]: string } = {
   "00": "죗",
   "01": "죙",
   "02": "죠",
@@ -2198,7 +2200,7 @@ export const koHexChar2Byte08Map: { [key: string]: string } = {
   "FE": "층",
 };
 
-export const koHexChar2Byte09Map: { [key: string]: string } = {
+const koHexChar2Byte09Map: { [key: string]: string } = {
   "01": "치",
   "02": "칙",
   "03": "친",
@@ -2436,7 +2438,7 @@ export const koHexChar2Byte09Map: { [key: string]: string } = {
   "FF": "팥",
 };
 
-export const koHexChar2Byte0AMap: { [key: string]: string } = {
+const koHexChar2Byte0AMap: { [key: string]: string } = {
   "00": "패",
   "01": "팩",
   "02": "팬",
@@ -2689,19 +2691,11 @@ export const koHexChar2ByteMap: { [key: string]: { [key: string]: string } } = {
 };
 
 export const koCharHexMap: { [key: string]: string } = {
-  ...Object.entries(koHexChar2ByteMap).reduce(
-    (acc, [firstByte, map]) => ({
-      ...acc,
-      ...Object.entries(map).reduce(
-        (innerAcc, [secondByte, char]) => ({
-          ...innerAcc,
-          [char]: `${firstByte} ${secondByte}`,
-        }),
-        {},
-      ),
-    }),
-    {},
+  ...Object.fromEntries(
+    Object.entries(koHexChar2ByteMap).flatMap(([firstByte, map]) =>
+      Object.entries(map).map(([secondByte, char]) => [char, `${firstByte} ${secondByte}`]),
+    ),
   ),
-  ...Object.entries(koHexCharMap).reduce((acc, [hex, char]) => ({ ...acc, [char]: hex }), {}),
+  ...invertMap(koHexCharMap),
   ...koCharHexSpecialMap,
 };

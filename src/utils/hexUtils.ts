@@ -73,18 +73,17 @@ export const hexToText = (hex: string, language: Language, gen: Generation): str
   return hexArray.map((hex) => map[hex] || "").join("");
 };
 
+// Missing/partial operand bytes stay as "*" placeholders (e.g. "A" -> "A*", absent -> "**")
+const operandByte = (operand: string | undefined): string => {
+  return operand ? operand.padEnd(2, "*") : "**";
+};
+
 const processOperands = (instruction: string, operands: string[], operandCount: number): string => {
   if (operandCount === 2) {
-    return instruction.replace(
-      "**",
-      `${operands[1] ? (operands[1].length === 1 ? `${operands[1]}*` : operands[1]) : "**"}${operands[0] ? (operands[0].length === 1 ? `${operands[0]}*` : operands[0]) : "**"}`,
-    );
+    return instruction.replace("**", operandByte(operands[1]) + operandByte(operands[0]));
   }
   if (operandCount === 1) {
-    return instruction.replace(
-      "*",
-      `${operands[0] ? (operands[0].length === 1 ? `${operands[0]}*` : operands[0]) : "**"}`,
-    );
+    return instruction.replace("*", operandByte(operands[0]));
   }
   return instruction;
 };

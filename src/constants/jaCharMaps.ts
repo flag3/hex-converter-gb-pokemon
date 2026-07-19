@@ -1,3 +1,5 @@
+import { invertMap } from "./invertMap";
+
 const jaCharHexSpecialMap: { [key: string]: string } = {
   "ベ": "3D",
   "ペ": "47",
@@ -293,7 +295,7 @@ export const jaGen1HexCharMap: { [key: string]: string } = {
 };
 
 export const jaGen1CharHexMap: { [key: string]: string } = {
-  ...Object.entries(jaGen1HexCharMap).reduce((acc, [hex, char]) => ({ ...acc, [char]: hex }), {}),
+  ...invertMap(jaGen1HexCharMap),
   ...jaCharHexSpecialMap,
 };
 
@@ -557,6 +559,6 @@ export const jaGen2HexCharMap: { [key: string]: string } = {
 };
 
 export const jaGen2CharHexMap: { [key: string]: string } = {
-  ...Object.entries(jaGen2HexCharMap).reduce((acc, [hex, char]) => ({ ...acc, [char]: hex }), {}),
+  ...invertMap(jaGen2HexCharMap),
   ...jaCharHexSpecialMap,
 };
