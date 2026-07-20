@@ -11,12 +11,6 @@
   grid-template-columns: minmax(0, 436px);
 }
 
-@media (min-width: 48rem) {
-  .hex-fields {
-    grid-template-columns: repeat(3, minmax(0, 436px));
-  }
-}
-
 .hex-textarea,
 .hex-textarea textarea {
   box-sizing: border-box;
@@ -34,6 +28,10 @@
 }
 
 @media (min-width: 48rem) {
+  .hex-fields {
+    grid-template-columns: repeat(3, minmax(0, 436px));
+  }
+
   .hex-textarea textarea {
     min-height: calc(16lh + 2 * var(--base-size-12, 0.75rem));
   }
