@@ -5,11 +5,13 @@ import {
   REGISTER,
   REGISTER_NAMES,
   formatImmediate,
+  halfwordToHex,
   inRange,
+  parseByteDirective,
   parseImmediate,
   parseRegister,
+  parseRegisterList,
   signExtend,
-  toHexByte,
 } from "./assemblyCommon";
 import { normalizeHex } from "./validationUtils";
 
@@ -193,17 +195,9 @@ export const disassembleThumb = (hex: string): string => {
   return result.join("\n");
 };
 
-const parseRegisterList = (body: string): number | null => {
-  let mask = 0;
-  const trimmed = body.trim();
-  if (trimmed === "") return 0;
-
-  for (const token of trimmed.split(",")) {
-    const register = parseRegister(token.trim());
-    if (register < 0 || register > 7) return null;
-    mask |= 1 << register;
-  }
-  return mask;
+const parseLowRegisterList = (body: string): number | null => {
+  const mask = parseRegisterList(body);
+  return mask === null || mask & ~0xff ? null : mask;
 };
 
 interface EncodingRule {
@@ -395,7 +389,7 @@ const ENCODING_RULES: EncodingRule[] = [
       const extraIndex = tokens.findIndex((token) => token.toLowerCase() === extraName);
       const hasExtra = extraIndex !== -1 ? 1 : 0;
       const listTokens = tokens.filter((_, index) => index !== extraIndex);
-      const mask = parseRegisterList(listTokens.join(","));
+      const mask = parseLowRegisterList(listTokens.join(","));
       if (mask === null) return null;
       return [0xb400 | (isPop << 11) | (hasExtra << 8) | mask];
     },
@@ -405,7 +399,7 @@ const ENCODING_RULES: EncodingRule[] = [
     encode: (match) => {
       const isLoad = match[1].toLowerCase() === "ldmia" ? 1 : 0;
       const rb = parseRegister(match[2]);
-      const mask = parseRegisterList(match[3]);
+      const mask = parseLowRegisterList(match[3]);
       if (!lowRegisters(rb) || mask === null) return null;
       return [0xc000 | (isLoad << 11) | (rb << 8) | mask];
     },
@@ -455,26 +449,16 @@ const ENCODING_RULES: EncodingRule[] = [
   },
 ];
 
-const BYTE_RULE = new RegExp(`^\\.byte ${IMMEDIATE}$`, "i");
-
 const encodeLine = (line: string): string | null => {
-  const byteMatch = line.match(BYTE_RULE);
-  if (byteMatch) {
-    const value = parseImmediate(byteMatch[1]);
-    if (value === null || !inRange(value, 0, 0xff, 1)) return null;
-    return toHexByte(value);
-  }
+  const byte = parseByteDirective(line);
+  if (byte !== null) return byte;
 
   for (const { regex, encode } of ENCODING_RULES) {
     const match = line.match(regex);
     if (!match) continue;
     const halfwords = encode(match);
     if (!halfwords) continue;
-    return halfwords
-      .map((halfword) => {
-        return `${toHexByte(halfword & 0xff)} ${toHexByte((halfword >> 8) & 0xff)}`;
-      })
-      .join(" ");
+    return halfwords.map(halfwordToHex).join(" ");
   }
 
   return null;

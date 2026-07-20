@@ -4,11 +4,13 @@ import {
   REGISTER,
   REGISTER_NAMES,
   formatImmediate,
+  halfwordToHex,
   inRange,
+  parseByteDirective,
   parseImmediate,
   parseRegister,
+  parseRegisterList,
   signExtend,
-  toHexByte,
 } from "./assemblyCommon";
 import { normalizeHex } from "./validationUtils";
 
@@ -468,27 +470,6 @@ const parseHalfwordAddress = (text: string): AddressInfo | null => {
   return address;
 };
 
-const parseFullRegisterList = (body: string): number | null => {
-  let mask = 0;
-  const trimmed = body.trim();
-  if (trimmed === "") return 0;
-
-  for (const token of trimmed.split(",")) {
-    const range = token.trim().split("-");
-    if (range.length === 2) {
-      const start = parseRegister(range[0].trim());
-      const end = parseRegister(range[1].trim());
-      if (start < 0 || end < 0 || start > end) return null;
-      for (let register = start; register <= end; register++) mask |= 1 << register;
-      continue;
-    }
-    const register = parseRegister(token.trim());
-    if (register < 0) return null;
-    mask |= 1 << register;
-  }
-  return mask;
-};
-
 interface ArmEncodingRule {
   regex: RegExp;
   encode: (match: RegExpMatchArray) => number | null;
@@ -707,7 +688,7 @@ const ARM_ENCODING_RULES: ArmEncodingRule[] = [
     encode: (match) => {
       const condition = parseCondition(match[2]);
       const rn = parseRegister(match[4]);
-      const mask = parseFullRegisterList(match[6]);
+      const mask = parseRegisterList(match[6]);
       if (condition < 0 || rn < 0 || mask === null) return null;
       const isLoad = match[1].toLowerCase() === "ldm" ? 1 : 0;
       const modeName = match[3].toLowerCase();
@@ -795,21 +776,16 @@ const ARM_ENCODING_RULES: ArmEncodingRule[] = [
 ];
 
 const HWORD_RULE = new RegExp(`^\\.hword ${IMMEDIATE}$`, "i");
-const BYTE_RULE = new RegExp(`^\\.byte ${IMMEDIATE}$`, "i");
 
 const encodeArmLine = (line: string): string | null => {
-  const byteMatch = line.match(BYTE_RULE);
-  if (byteMatch) {
-    const value = parseImmediate(byteMatch[1]);
-    if (value === null || !inRange(value, 0, 0xff, 1)) return null;
-    return toHexByte(value);
-  }
+  const byte = parseByteDirective(line);
+  if (byte !== null) return byte;
 
   const halfwordMatch = line.match(HWORD_RULE);
   if (halfwordMatch) {
     const value = parseImmediate(halfwordMatch[1]);
     if (value === null || !inRange(value, 0, 0xffff, 1)) return null;
-    return `${toHexByte(value & 0xff)} ${toHexByte((value >> 8) & 0xff)}`;
+    return halfwordToHex(value);
   }
 
   for (const { regex, encode } of ARM_ENCODING_RULES) {
@@ -817,9 +793,7 @@ const encodeArmLine = (line: string): string | null => {
     if (!match) continue;
     const word = encode(match);
     if (word === null) continue;
-    return [word & 0xff, (word >>> 8) & 0xff, (word >>> 16) & 0xff, (word >>> 24) & 0xff]
-      .map(toHexByte)
-      .join(" ");
+    return `${halfwordToHex(word & 0xffff)} ${halfwordToHex(word >>> 16)}`;
   }
 
   return null;

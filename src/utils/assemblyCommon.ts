@@ -74,3 +74,39 @@ export const inRange = (value: number, min: number, max: number, multiple: numbe
 export const toHexByte = (value: number): string => {
   return value.toString(16).toUpperCase().padStart(2, "0");
 };
+
+export const halfwordToHex = (halfword: number): string => {
+  return `${toHexByte(halfword & 0xff)} ${toHexByte((halfword >> 8) & 0xff)}`;
+};
+
+const BYTE_RULE = new RegExp(`^\\.byte ${IMMEDIATE}$`, "i");
+
+export const parseByteDirective = (line: string): string | null => {
+  const match = line.match(BYTE_RULE);
+  if (!match) return null;
+  const value = parseImmediate(match[1]);
+  if (value === null || !inRange(value, 0, 0xff, 1)) return null;
+  return toHexByte(value);
+};
+
+// Accepts both single registers and ranges ("r0-r3, lr")
+export const parseRegisterList = (body: string): number | null => {
+  let mask = 0;
+  const trimmed = body.trim();
+  if (trimmed === "") return 0;
+
+  for (const token of trimmed.split(",")) {
+    const range = token.trim().split("-");
+    if (range.length === 2) {
+      const start = parseRegister(range[0].trim());
+      const end = parseRegister(range[1].trim());
+      if (start < 0 || end < 0 || start > end) return null;
+      for (let register = start; register <= end; register++) mask |= 1 << register;
+      continue;
+    }
+    const register = parseRegister(token.trim());
+    if (register < 0) return null;
+    mask |= 1 << register;
+  }
+  return mask;
+};

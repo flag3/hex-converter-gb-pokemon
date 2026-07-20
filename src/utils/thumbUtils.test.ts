@@ -46,6 +46,8 @@ describe("thumbUtils", () => {
     it("should assemble representative instructions", () => {
       expect(assembleThumb("movs r0, #0x1")).toBe("01 20");
       expect(assembleThumb("push {r4, lr}")).toBe("10 B5");
+      expect(assembleThumb("push {r0-r7, lr}")).toBe("FF B5");
+      expect(assembleThumb("push {r0-r7, r8}")).toBe("");
       expect(assembleThumb("bx lr")).toBe("70 47");
       expect(assembleThumb("bl #0x400")).toBe("00 F0 00 FA");
       expect(assembleThumb(".hword 0xB1FF")).toBe("FF B1");
