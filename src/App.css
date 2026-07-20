@@ -1,61 +1,40 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  width: 100%;
   padding: 2rem;
   text-align: center;
 }
 
-.input-container {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
+.hex-fields {
+  display: grid;
+  gap: 1rem;
+  justify-content: center;
+  grid-template-columns: minmax(0, 436px);
 }
 
-label {
-  display: block;
-  margin-bottom: 8px;
+@media (min-width: 48rem) {
+  .hex-fields {
+    grid-template-columns: repeat(3, minmax(0, 436px));
+  }
 }
 
-textarea {
+.hex-textarea,
+.hex-textarea textarea {
+  box-sizing: border-box;
   width: 100%;
-  border: 1px solid #aaa;
+  max-width: 100%;
 }
 
-button {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: none;
-  background-color: #333;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-size: 16px;
+.hex-textarea textarea {
+  font-family: var(--fontStack-monospace);
+  min-height: clamp(
+    4lh + 2 * var(--base-size-12, 0.75rem),
+    (100dvh - 24rem) / 3,
+    10lh + 2 * var(--base-size-12, 0.75rem)
+  );
 }
 
-button:hover {
-  background-color: #555;
-}
-
-button svg {
-  width: 24px;
-  height: 24px;
-}
-
-@media screen and (max-width: 768px) {
-  .input-container {
-    display: block;
+@media (min-width: 48rem) {
+  .hex-textarea textarea {
+    min-height: calc(16lh + 2 * var(--base-size-12, 0.75rem));
   }
-
-  textarea {
-    width: 100%;
-    height: 15vh;
-    margin-bottom: 20px;
-  }
-}
-
-select {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  appearance: none;
-  font-size: 16px;
 }

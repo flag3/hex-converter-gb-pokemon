@@ -5,5 +5,6 @@
   "language": "Lingua",
   "text": "Testo",
   "hex": "Hex",
-  "program": "Programma"
+  "program": "Programma",
+  "reset": "Reimposta"
 }
