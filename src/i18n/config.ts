@@ -48,9 +48,11 @@ export const initI18next = async () => {
       },
     });
 
-  document.documentElement.lang = i18next.language;
-
-  i18next.on("languageChanged", (lng) => {
+  const syncDocument = (lng: string) => {
     document.documentElement.lang = lng;
-  });
+    document.title = i18next.t("title");
+  };
+
+  syncDocument(i18next.language);
+  i18next.on("languageChanged", syncDocument);
 };
