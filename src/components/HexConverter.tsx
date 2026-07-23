@@ -25,7 +25,7 @@ export const HexConverter = () => {
 
   return (
     <Stack gap="normal">
-      <Heading as="h2">{t("title")}</Heading>
+      <Heading as="h1">{t("title")}</Heading>
       <Stack direction="horizontal" gap="normal" wrap="wrap" justify="center">
         <FormControl>
           <FormControl.Label>{t("language")}</FormControl.Label>
