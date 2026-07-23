@@ -6,5 +6,5 @@
   "text": "Text",
   "hex": "Hex",
   "program": "Program",
-  "reset": "Reset"
+  "clear": "Clear"
 }

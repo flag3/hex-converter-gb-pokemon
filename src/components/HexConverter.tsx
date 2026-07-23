@@ -20,7 +20,7 @@ export const HexConverter = () => {
     updateFromText,
     updateFromHex,
     updateFromProgram,
-    reset,
+    clear,
   } = useHexConverter();
 
   return (
@@ -95,7 +95,7 @@ export const HexConverter = () => {
         </FormControl>
       </div>
       <Stack direction="horizontal" justify="center">
-        <IconButton icon={DeleteIcon} aria-label={t("reset")} onClick={reset} />
+        <IconButton icon={DeleteIcon} aria-label={t("clear")} onClick={clear} />
       </Stack>
     </Stack>
   );

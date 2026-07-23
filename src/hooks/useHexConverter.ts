@@ -35,7 +35,7 @@ export const useHexConverter = () => {
     setText(hexToText(newHex, language, gen));
   };
 
-  const reset = () => {
+  const clear = () => {
     setText("");
     setHex("");
     setProgram("");
@@ -52,6 +52,6 @@ export const useHexConverter = () => {
     updateFromText,
     updateFromHex,
     updateFromProgram,
-    reset,
+    clear,
   };
 };
