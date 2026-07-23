@@ -1,13 +1,7 @@
-:root {
-  color-scheme: light dark;
-}
-
 body {
-  margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
   background-color: var(--bgColor-default);
-  color: var(--fgColor-default);
 }
