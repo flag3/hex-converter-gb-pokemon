@@ -5,34 +5,40 @@
 }
 
 .hex-fields {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 1rem;
-  justify-content: center;
-  grid-template-columns: minmax(0, 436px);
+  container-type: inline-size;
 }
 
-.hex-textarea,
+.hex-fields > * {
+  max-width: 100%;
+  min-width: 0;
+}
+
 .hex-textarea textarea {
   box-sizing: border-box;
-  width: 100%;
-  max-width: 100%;
-}
-
-.hex-textarea textarea {
-  font-family: var(--fontStack-monospace);
-  min-height: clamp(
+  width: 436px;
+  max-width: calc(100cqw - 2px);
+  height: clamp(
     4lh + 2 * var(--base-size-12, 0.75rem),
     (100dvh - 24rem) / 3,
     10lh + 2 * var(--base-size-12, 0.75rem)
   );
+  font-family: var(--fontStack-monospace);
 }
 
 @media (min-width: 48rem) {
   .hex-fields {
-    grid-template-columns: repeat(3, minmax(0, 436px));
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
   }
 
   .hex-textarea textarea {
-    min-height: calc(16lh + 2 * var(--base-size-12, 0.75rem));
+    width: min(436px, calc((100cqw - 2rem - 1px) / 3 - 2px));
+    height: calc(16lh + 2 * var(--base-size-12, 0.75rem));
   }
 }

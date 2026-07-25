@@ -71,7 +71,6 @@ export const HexConverter = () => {
           <Textarea
             value={text}
             onChange={(event) => updateFromText(event.target.value)}
-            resize="vertical"
             className="hex-textarea"
           />
         </FormControl>
@@ -80,7 +79,6 @@ export const HexConverter = () => {
           <Textarea
             value={hex}
             onChange={(event) => updateFromHex(event.target.value)}
-            resize="vertical"
             className="hex-textarea"
           />
         </FormControl>
@@ -89,7 +87,6 @@ export const HexConverter = () => {
           <Textarea
             value={program}
             onChange={(event) => updateFromProgram(event.target.value)}
-            resize="vertical"
             className="hex-textarea"
           />
         </FormControl>
