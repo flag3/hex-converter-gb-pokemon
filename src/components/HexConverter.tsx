@@ -20,6 +20,7 @@ export const HexConverter = () => {
   const { t, i18n } = useTranslation();
   const cpuLabelId = useId();
   const {
+    language,
     gen,
     setGen,
     cpuMode,
@@ -39,10 +40,7 @@ export const HexConverter = () => {
       <Stack direction="horizontal" gap="normal" wrap="wrap" justify="center">
         <FormControl>
           <FormControl.Label>{t("language")}</FormControl.Label>
-          <Select
-            value={i18n.language}
-            onChange={(event) => i18n.changeLanguage(event.target.value)}
-          >
+          <Select value={language} onChange={(event) => i18n.changeLanguage(event.target.value)}>
             {LANGUAGE_OPTIONS.map((option) => (
               <Select.Option key={option.value} value={option.value}>
                 {option.label}
@@ -50,7 +48,7 @@ export const HexConverter = () => {
             ))}
           </Select>
         </FormControl>
-        {i18n.language !== "ko" && (
+        {language !== "ko" && (
           <FormControl>
             <FormControl.Label>{t("gen")}</FormControl.Label>
             <Select value={gen} onChange={(event) => setGen(event.target.value as Generation)}>

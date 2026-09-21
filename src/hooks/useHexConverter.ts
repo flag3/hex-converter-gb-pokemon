@@ -7,7 +7,9 @@ import { useTranslation } from "react-i18next";
 
 export const useHexConverter = () => {
   const { i18n } = useTranslation();
-  const language: Language = isLanguage(i18n.language) ? i18n.language : "en";
+  const resolvedLanguage = i18n.resolvedLanguage;
+  const language: Language =
+    resolvedLanguage && isLanguage(resolvedLanguage) ? resolvedLanguage : "en";
   const [gen, setGen] = useState<Generation>("1");
   const [cpuMode, setCpuMode] = useState<CpuMode>("thumb");
   const [text, setText] = useState("");
@@ -42,6 +44,7 @@ export const useHexConverter = () => {
   };
 
   return {
+    language,
     gen,
     setGen,
     cpuMode,
