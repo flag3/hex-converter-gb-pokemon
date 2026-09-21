@@ -2,13 +2,23 @@ import { useHexConverter } from "./../hooks/useHexConverter";
 import type { CpuMode, Generation } from "./../types";
 import { LANGUAGE_OPTIONS, GENERATION_OPTIONS, CPU_MODE_OPTIONS } from "./../constants/options";
 import { Icon } from "@iconify/react";
-import { FormControl, Heading, IconButton, Select, Stack, Textarea } from "@primer/react";
+import {
+  FormControl,
+  Heading,
+  IconButton,
+  SegmentedControl,
+  Select,
+  Stack,
+  Textarea,
+} from "@primer/react";
+import { useId } from "react";
 import { useTranslation } from "react-i18next";
 
 const DeleteIcon = () => <Icon icon="material-symbols:delete-outline" />;
 
 export const HexConverter = () => {
   const { t, i18n } = useTranslation();
+  const cpuLabelId = useId();
   const {
     gen,
     setGen,
@@ -54,18 +64,23 @@ export const HexConverter = () => {
         )}
         {gen === "3" && (
           <FormControl>
-            <FormControl.Label>{t("cpu")}</FormControl.Label>
-            <Select value={cpuMode} onChange={(event) => setCpuMode(event.target.value as CpuMode)}>
+            <FormControl.Label as="span" id={cpuLabelId}>
+              {t("cpu")}
+            </FormControl.Label>
+            <SegmentedControl
+              aria-labelledby={cpuLabelId}
+              onChange={(index) => setCpuMode(CPU_MODE_OPTIONS[index].value as CpuMode)}
+            >
               {CPU_MODE_OPTIONS.map((option) => (
-                <Select.Option key={option.value} value={option.value}>
+                <SegmentedControl.Button key={option.value} selected={cpuMode === option.value}>
                   {option.label}
-                </Select.Option>
+                </SegmentedControl.Button>
               ))}
-            </Select>
+            </SegmentedControl>
           </FormControl>
         )}
       </Stack>
-      <div className="hex-fields">
+      <Stack className="hex-fields" direction="horizontal" justify="center" wrap="wrap">
         <FormControl>
           <FormControl.Label>{t("text")}</FormControl.Label>
           <Textarea
@@ -90,7 +105,7 @@ export const HexConverter = () => {
             className="hex-textarea"
           />
         </FormControl>
-      </div>
+      </Stack>
       <Stack direction="horizontal" justify="center">
         <IconButton icon={DeleteIcon} aria-label={t("clear")} onClick={clear} />
       </Stack>

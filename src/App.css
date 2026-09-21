@@ -5,10 +5,6 @@
 }
 
 .hex-fields {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
   container-type: inline-size;
 }
 
@@ -30,15 +26,7 @@
 }
 
 @media (min-width: 48rem) {
-  .hex-fields {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
-  }
-
   .hex-textarea textarea {
-    width: min(436px, calc((100cqw - 2rem - 1px) / 3 - 2px));
     height: calc(16lh + 2 * var(--base-size-12, 0.75rem));
   }
 }
